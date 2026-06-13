@@ -24,7 +24,6 @@ export default function Home() {
 
   const handleReset = () => {
     setResult(null);
-    setClickHistory([]);
     setShowYeter(false);
   };
 
