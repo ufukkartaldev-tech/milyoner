@@ -5,6 +5,28 @@ import Image from "next/image";
 
 export default function Home() {
   const [result, setResult] = useState<"mutlu" | "ufuk" | null>(null);
+  const [clickHistory, setClickHistory] = useState<("mutlu" | "ufuk")[]>([]);
+  const [showYeter, setShowYeter] = useState(false);
+
+  const handleClick = (choice: "mutlu" | "ufuk") => {
+    const newHistory = [...clickHistory, choice];
+    setClickHistory(newHistory);
+    setResult(choice);
+    
+    // Son 3 tıklamayı kontrol et
+    if (newHistory.length >= 3) {
+      const lastThree = newHistory.slice(-3);
+      if (lastThree.every(click => click === choice)) {
+        setShowYeter(true);
+      }
+    }
+  };
+
+  const handleReset = () => {
+    setResult(null);
+    setClickHistory([]);
+    setShowYeter(false);
+  };
 
   return (
     <div style={{ 
@@ -22,7 +44,7 @@ export default function Home() {
 
       <div style={{ display: "flex", gap: "60px", alignItems: "center" }}>
         <button
-          onClick={() => setResult("mutlu")}
+          onClick={() => handleClick("mutlu")}
           style={{
             border: "none",
             background: "none",
@@ -41,7 +63,7 @@ export default function Home() {
         </button>
 
         <button
-          onClick={() => setResult("ufuk")}
+          onClick={() => handleClick("ufuk")}
           style={{
             border: "none",
             background: "none",
@@ -86,9 +108,23 @@ export default function Home() {
         </div>
       )}
 
+      {showYeter && (
+        <div style={{ 
+          marginTop: "40px", 
+          padding: "20px 40px", 
+          backgroundColor: "#FF9800",
+          color: "white",
+          borderRadius: "10px",
+          fontSize: "1.8rem",
+          fontWeight: "bold"
+        }}>
+          🚫 YETER LA!
+        </div>
+      )}
+
       {result && (
         <button
-          onClick={() => setResult(null)}
+          onClick={handleReset}
           style={{
             marginTop: "20px",
             padding: "10px 30px",
